@@ -16,6 +16,8 @@ public class MainPanel extends JPanel
 		this.setSize(300, 200);
 		
 		helloWorld = FaceGetter.getSkin("Reiclag");
+		
+		System.out.println(ColorCompare.similarity(helloWorld.getRGB(0, 0), helloWorld.getRGB(0, 1)));
 	}
 
 	@Override
