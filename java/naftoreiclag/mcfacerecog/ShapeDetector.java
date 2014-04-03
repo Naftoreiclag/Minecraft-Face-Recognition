@@ -12,15 +12,18 @@ public class ShapeDetector
 	{
 		List<BufferedImage> returnVal = new ArrayList<BufferedImage>();
 		
-		boolean[][] checkedPixels = new boolean[8][8];
+		boolean[][] claimedPixels = new boolean[8][8];
 		
 		for(int xp = 0; xp < 8; xp ++)
 		{
 			for(int yp = 0; yp < 8; yp ++)
 			{
-				if(!checkedPixels[xp][yp])
+				if(!claimedPixels[xp][yp])
 				{
-					returnVal.add(detectShape(img, xp, yp, checkedPixels));
+					boolean[][] result = detectShape(img, xp, yp);
+					
+					claimedPixels = orArray(claimedPixels, result);
+					returnVal.add(convertToImage(result));
 				}
 			}
 		}
@@ -35,12 +38,27 @@ public class ShapeDetector
 		return two;
 	}
 	
-	public static BufferedImage detectShape(BufferedImage img, int x, int y)
+	public static boolean[][] orArray(boolean[][] a, boolean[][] b)
+	{
+		boolean[][] returnVal = new boolean[8][8];
+		
+		for(int xp = 0; xp < 8; xp ++)
+		{
+			for(int yp = 0; yp < 8; yp ++)
+			{
+				returnVal[xp][yp] = a[xp][yp] || b[xp][yp];
+			}
+		}
+		
+		return returnVal;
+	}
+	
+	public static boolean[][] detectShape(BufferedImage img, int x, int y)
 	{
 		return detectShape(img, x, y, new boolean[8][8]);
 	}
 	
-	public static BufferedImage detectShape(BufferedImage img, int x, int y, boolean[][] checkedPixels)
+	public static boolean[][] detectShape(BufferedImage img, int x, int y, boolean[][] checkedPixels)
 	{
 		// Stores which have been checked
 		boolean[][] goodPixels = new boolean[8][8];
@@ -48,6 +66,11 @@ public class ShapeDetector
 		// Begin the stack calculation
 		stackCompare(img, checkedPixels, goodPixels, img.getRGB(x, y), x, y);
 		
+		return goodPixels;
+	}
+	
+	public static BufferedImage convertToImage(boolean[][] goodPixels)
+	{
 		// Convert this into an image
 		BufferedImage returnVal = new BufferedImage(8, 8, BufferedImage.TYPE_INT_ARGB);
 		for(int xp = 0; xp < 8; xp ++)

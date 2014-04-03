@@ -36,7 +36,8 @@ public class MainPanel extends JPanel
 		
 		for(int x = 0; x < yes.length; ++ x)
 		{
-			g2.drawImage(yes[x], (x * 74) + 10, 10, 64, 64, null);
+			//g2.drawImage(helloWorld, (x * 74) + 84, 10, 64, 64, null);
+			g2.drawImage(yes[x], (x * 74) + 84, 10, 64, 64, null);
 		}
 	}
 }
