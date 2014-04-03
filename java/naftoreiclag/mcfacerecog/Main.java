@@ -11,6 +11,7 @@ public class Main extends JFrame
 	public Main()
 	{
 		super("fjieoawretryuoragjioaewf");
+		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		this.setSize(300, 200);
 		this.setLocationRelativeTo(null);
 		

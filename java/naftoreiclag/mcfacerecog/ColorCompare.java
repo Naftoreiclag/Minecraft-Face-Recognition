@@ -16,6 +16,7 @@ public class ColorCompare
         float[] nat1 = Color.RGBtoHSB(r1, g1, b1, null);
         float[] nat2 = Color.RGBtoHSB(r2, g2, b2, null);
         
+        /*
         for(float f : nat1)
         {
         	System.out.println(f);
@@ -24,6 +25,7 @@ public class ColorCompare
         {
         	System.out.println(f);
         }
+        */
         
         return (float) Math.sqrt(Math.pow(nat1[0] - nat2[0], 2d) + Math.pow(nat1[1] - nat2[1], 2d) + Math.pow(nat1[2] - nat2[2], 2d));
 	}
