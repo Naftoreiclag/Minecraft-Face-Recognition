@@ -19,7 +19,7 @@ public class FaceGetter
 		Graphics2D painter = (Graphics2D) errorFace.getGraphics();
 		
 		painter.setColor(Color.WHITE);
-		painter.drawRect(0, 0, 8, 8);
+		painter.fillRect(0, 0, 8, 8);
 		
 		errorFace.setRGB(2, 1, 0);
 		errorFace.setRGB(3, 1, 0);
