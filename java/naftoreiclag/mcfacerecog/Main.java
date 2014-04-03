@@ -11,7 +11,7 @@ public class Main extends JFrame
 	public Main()
 	{
 		super("fjieoawretryuoragjioaewf");
-		this.setSize(100, 100);
+		this.setSize(300, 200);
 		this.setLocationRelativeTo(null);
 		
 		FaceGetter.loadErrorFace();

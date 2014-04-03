@@ -13,6 +13,8 @@ public class MainPanel extends JPanel
 	
 	public MainPanel()
 	{
+		this.setSize(300, 200);
+		
 		helloWorld = FaceGetter.getSkin("Reiclag");
 	}
 
@@ -21,6 +23,6 @@ public class MainPanel extends JPanel
 	{
 		super.paint(g);
 		Graphics2D g2 = (Graphics2D) g;
-		g2.drawImage(helloWorld, null, 10, 10);
+		g2.drawImage(helloWorld, 10, 10, 64, 64, null);
 	}
 }
