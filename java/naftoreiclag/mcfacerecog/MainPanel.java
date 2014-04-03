@@ -11,7 +11,7 @@ public class MainPanel extends JPanel
 {
 	BufferedImage helloWorld;
 	
-	BufferedImage yes;
+	BufferedImage[] yes;
 	
 	public MainPanel()
 	{
@@ -19,10 +19,12 @@ public class MainPanel extends JPanel
 		
 		helloWorld = FaceGetter.getSkin("Reiclag");
 		
-		System.out.println(ColorCompare.similarity(helloWorld.getRGB(0, 0), helloWorld.getRGB(0, 1)));
-		System.out.println(ColorCompare.similarity(helloWorld.getRGB(0, 0), helloWorld.getRGB(0, 3)));
+		//System.out.println(ColorCompare.similarity(helloWorld.getRGB(0, 0), helloWorld.getRGB(0, 1)));
+		//System.out.println(ColorCompare.similarity(helloWorld.getRGB(0, 0), helloWorld.getRGB(0, 3)));
 		
-		yes = ShapeDetector.detectShape(helloWorld, 0, 0);
+		yes = ShapeDetector.detectShapes(helloWorld);
+		
+		System.out.println(yes.length);
 	}
 
 	@Override
@@ -31,6 +33,10 @@ public class MainPanel extends JPanel
 		super.paint(g);
 		Graphics2D g2 = (Graphics2D) g;
 		g2.drawImage(helloWorld, 10, 10, 64, 64, null);
-		g2.drawImage(yes, 84, 10, 64, 64, null);
+		
+		for(int x = 0; x < yes.length; ++ x)
+		{
+			g2.drawImage(yes[x], (x * 74) + 10, 10, 64, 64, null);
+		}
 	}
 }

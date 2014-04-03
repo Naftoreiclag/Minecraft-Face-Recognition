@@ -1,30 +1,66 @@
 package naftoreiclag.mcfacerecog;
 
 import java.awt.image.BufferedImage;
+import java.util.ArrayList;
+import java.util.List;
 
 public class ShapeDetector
 {
+	public static final float tolerance = 0.2f;
+	
+	public static BufferedImage[] detectShapes(BufferedImage img)
+	{
+		List<BufferedImage> returnVal = new ArrayList<BufferedImage>();
+		
+		boolean[][] checkedPixels = new boolean[8][8];
+		
+		for(int xp = 0; xp < 8; xp ++)
+		{
+			for(int yp = 0; yp < 8; yp ++)
+			{
+				if(!checkedPixels[xp][yp])
+				{
+					returnVal.add(detectShape(img, xp, yp, checkedPixels));
+				}
+			}
+		}
+		
+		BufferedImage[] two = new BufferedImage[returnVal.size()];
+		
+		for(int i = 0; i < two.length; ++ i)
+		{
+			two[i] = returnVal.get(i);
+		}
+		
+		return two;
+	}
+	
 	public static BufferedImage detectShape(BufferedImage img, int x, int y)
 	{
+		return detectShape(img, x, y, new boolean[8][8]);
+	}
+	
+	public static BufferedImage detectShape(BufferedImage img, int x, int y, boolean[][] checkedPixels)
+	{
 		// Stores which have been checked
-		boolean[][] checkedPixels = new boolean[8][8];
 		boolean[][] goodPixels = new boolean[8][8];
 		
-		compare(img, checkedPixels, goodPixels, img.getRGB(x, y), x, y);
+		// Begin the stack calculation
+		stackCompare(img, checkedPixels, goodPixels, img.getRGB(x, y), x, y);
 		
+		// Convert this into an image
 		BufferedImage returnVal = new BufferedImage(8, 8, BufferedImage.TYPE_INT_ARGB);
-		
 		for(int xp = 0; xp < 8; xp ++)
 		{
 			for(int yp = 0; yp < 8; yp ++)
 			{
 				if(goodPixels[xp][yp])
 				{
-					img.setRGB(xp, yp, 0xFF000000);
+					returnVal.setRGB(xp, yp, 0xFF000000);
 				}
 				else
 				{
-					img.setRGB(xp, yp, 0x00000000);
+					returnVal.setRGB(xp, yp, 0x00000000);
 				}
 			}
 		}
@@ -32,7 +68,8 @@ public class ShapeDetector
 		return returnVal;
 	}
 	
-	public static void compare(BufferedImage img, boolean[][] checkedPixels, boolean[][] goodPixels, int baseColor, int x, int y)
+	// Stack-based flood fill with two arrays: One to keep track of who has been checked, and one as a carry. Other params are self-explanitory.
+	public static void stackCompare(BufferedImage img, boolean[][] checkedPixels, boolean[][] goodPixels, int baseColor, int x, int y)
 	{
 		// Bounds check
 		if(x < 0 || x >= 8 || y < 0 || y >= 8) { return; }
@@ -47,16 +84,16 @@ public class ShapeDetector
 		int otherColor = img.getRGB(x, y);
 		
 		// If the two colors are similar
-		if(ColorCompare.similarity(baseColor, otherColor) < 0.3f)
+		if(ColorCompare.similarity(baseColor, otherColor) < tolerance)
 		{
 			// Then yes
 			goodPixels[x][y] = true;
 			
 			// Compare neighbor pixels
-			compare(img, checkedPixels, goodPixels, otherColor, x + 1, y);
-			compare(img, checkedPixels, goodPixels, otherColor, x, y + 1);
-			compare(img, checkedPixels, goodPixels, otherColor, x - 1, y);
-			compare(img, checkedPixels, goodPixels, otherColor, x, y - 1);
+			stackCompare(img, checkedPixels, goodPixels, otherColor, x + 1, y);
+			stackCompare(img, checkedPixels, goodPixels, otherColor, x, y + 1);
+			stackCompare(img, checkedPixels, goodPixels, otherColor, x - 1, y);
+			stackCompare(img, checkedPixels, goodPixels, otherColor, x, y - 1);
 		}
 	}
 }
